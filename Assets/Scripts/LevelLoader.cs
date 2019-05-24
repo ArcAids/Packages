@@ -16,16 +16,18 @@ public class LevelLoader : MonoBehaviour
     [SerializeField]
     TMP_Text loadingHintText;
     [Space]
-    [Range(0,1)]
+    [Range(0, 1)]
     [SerializeField]
-    float actualLoadingEndsAt=0.5f;
+    float actualLoadingEndsAt = 0.5f;
     [SerializeField]
-    int iterationsForLoadingSimulation=3;
+    float delayAfterActualLoading = 1f;
+    [SerializeField]
+    int iterationsForLoadingSimulation = 3;
 
+    bool isLoading=false;
     AsyncOperation loading;
     Animator loadingAnimator;
     int randomNumber;
-    int levelToLoad=0;
     static LevelLoader Instance;
 
     readonly int fadeInHash = Animator.StringToHash("FadeIn");
@@ -57,45 +59,48 @@ public class LevelLoader : MonoBehaviour
 
     public void LoadLevel()
     {
-        levelToLoad = data.LoadLevelNumber;
-        StartCoroutine(Loading());
+        if (isLoading)
+            return;
+        isLoading=true;
+        StartCoroutine(Loading(data.LoadLevelNumber));
     }
 
-    IEnumerator Loading()
+    IEnumerator Loading(int levelNumber)
     {
         SetLoadingProgress(0);
         loadingHintText.text = data.GetRandomTip();
 
-        if (loadingAnimator!=null)
+        if (loadingAnimator != null)
             loadingAnimator.SetTrigger(fadeInHash);
 
         yield return new WaitForSeconds(1f);
-        loading= SceneManager.LoadSceneAsync(levelToLoad);
+        loading = SceneManager.LoadSceneAsync(levelNumber);
 
-        while (loading.progress<1)
+        while (loading.progress < 1)
         {
-            SetLoadingProgress(loading.progress*actualLoadingEndsAt);
+            SetLoadingProgress(loading.progress * actualLoadingEndsAt);
             yield return null;
         }
         SetLoadingProgress(actualLoadingEndsAt);
         randomNumber = (int)(actualLoadingEndsAt * 100);
-        yield return new WaitForSeconds(1f);
+
+        float delay = delayAfterActualLoading / iterationsForLoadingSimulation;
+
         for (int i = 0; i < iterationsForLoadingSimulation; i++)
         {
-            randomNumber= Random.Range(randomNumber, 90);
-            SetLoadingProgress(randomNumber/100f);
-            yield return new WaitForSeconds(1f/iterationsForLoadingSimulation);
+            randomNumber = Random.Range(randomNumber, 100);
+            SetLoadingProgress(randomNumber / 100f);
+            yield return new WaitForSeconds(delay);
         }
         SetLoadingProgress(1);
-
-        if (loadingAnimator!=null)
+        isLoading = false;
+        if (loadingAnimator != null)
             loadingAnimator.SetTrigger(fadeOutHash);
     }
 
     void SetLoadingProgress(float progress)
     {
-        progress=(float)decimal.Round((decimal)progress,2);
-        Debug.Log(progress);
+        progress = (float)decimal.Round((decimal)progress, 2);
         loadingBar.fillAmount = progress;
         loadingProgressText.text = "Loading " + progress * 100 + "%";
     }

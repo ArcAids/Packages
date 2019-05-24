@@ -21,37 +21,54 @@ public class AudioData : ScriptableObject
     [SerializeField]
     float musicVolume;
     [SerializeField]
+    float masterVolume;
+    [SerializeField]
     float sfxVolume;
     [SerializeField]
     AnimationCurve volumeCurve;
     public bool Muted { get => muted; set {MuteAudio(value); } }
     public float MusicVolume { get => musicVolume; set { SetMusicVolume(value); } }
+    public float MasterVolume { get => masterVolume; set { SetMasterVolume(value); } }
     public float SFXVolume { get => sfxVolume; set { SetSFXVolume(value); } }
 
     List<IOnMuteCallback> callbacks=new List<IOnMuteCallback>();
 
-    public void MuteAudio(bool muted)
+    public void LoadAudioSettings()
+    {
+        MasterVolume = masterVolume;
+        MusicVolume = musicVolume;
+        SFXVolume= sfxVolume;
+        Muted = muted;
+    }
+
+    void MuteAudio(bool muted)
     {
         this.muted = muted;
-        mixer.SetFloat(exposedMasterVolumeName, muted? -80: GetActualValue(MusicVolume));
+        mixer.SetFloat(exposedMasterVolumeName, muted? -80: GetActualValue(MasterVolume));
         foreach (var reciever in callbacks)
         {
             reciever.AudioMuted(muted);
         }
     }
 
-    public void SetMusicVolume(float value)
+    void SetMasterVolume(float value)
     {
-        musicVolume = value;
+        masterVolume = value;
 
-        mixer.SetFloat(exposedMusicVolumeName, GetActualValue(value));
+        mixer.SetFloat(exposedMasterVolumeName, GetActualValue(value));
         if (value == 0)
             MuteAudio(true);
         if (Muted && value > 0)
             MuteAudio(false);
     }
 
-    public void SetSFXVolume(float value)
+    void SetMusicVolume(float value)
+    {
+        musicVolume = value;
+        mixer.SetFloat(exposedMusicVolumeName, GetActualValue(value));
+    }
+
+    void SetSFXVolume(float value)
     {
         sfxVolume = value;
         mixer.SetFloat(exposedSFXVolumeName, GetActualValue(value));

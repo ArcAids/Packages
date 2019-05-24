@@ -37,7 +37,13 @@ public class GunBehaviour : WeaponBehaviour, IReloadable, IAimable
     private void Start()
     {
         FireRate = fireRate;
-        Reload(MagazineSize);
+        bulletsInMagazine = MagazineSize;
+    }
+
+    private void OnDisable()
+    {
+        StopAllCoroutines();
+        isReloading = false;
     }
 
     public override WeaponBehaviour Equip()
@@ -81,7 +87,7 @@ public class GunBehaviour : WeaponBehaviour, IReloadable, IAimable
         isReloading = true;
         StartCoroutine(ReloadWait(numberOfBullets));
     }
-    
+     
     IEnumerator ReloadWait(int numberOfBullets)
     {
         yield return new WaitForSeconds(ReloadTime);

@@ -13,12 +13,13 @@ MonoBehaviour:
   m_Name: New Audio Data
   m_EditorClassIdentifier: 
   mixer: {fileID: 24100000, guid: d9866916ffc88d54ca4a446ac304082f, type: 2}
-  masterGroup: {fileID: 0}
+  masterGroup: {fileID: 24300002, guid: d9866916ffc88d54ca4a446ac304082f, type: 2}
   exposedMasterVolumeName: MasterVolume
   exposedMusicVolumeName: MusicVolume
   exposedSFXVolumeName: SFXVolume
   muted: 0
-  musicVolume: 1
+  musicVolume: 0.6016781
+  masterVolume: 4.64
   sfxVolume: 0
   volumeCurve:
     serializedVersion: 2
