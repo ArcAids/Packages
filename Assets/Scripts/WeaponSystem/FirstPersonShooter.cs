@@ -7,12 +7,16 @@ public class FirstPersonShooter : MonoBehaviour
     [SerializeField]
     Transform gunHolder;
     [SerializeField]
+    bool ignoreXRotation = false;
+    [SerializeField]
+    bool followCursor=false;
+    [SerializeField]
     WeaponBehaviour[] weapons;
 
     IShootable shootable;
     IReloadable reloadable;
     IAimable aimable;
-
+    [SerializeField]
     Camera cam;
     int gunEquippedIndex=-1;
     RaycastHit hit;
@@ -27,7 +31,8 @@ public class FirstPersonShooter : MonoBehaviour
         }
         if(weapons.Length>0)
             EquipWeapon(0);
-        cam = GetComponentInChildren<Camera>();
+        if(cam==null)
+            cam = GetComponentInChildren<Camera>();
     }
 
     void EquipWeapon(int index)
@@ -39,6 +44,7 @@ public class FirstPersonShooter : MonoBehaviour
             weapons[gunEquippedIndex].gameObject.transform.parent = null; 
             weapons[gunEquippedIndex].gameObject.SetActive(false);
         }
+        
         weapons[index].gameObject.transform.parent = gunHolder;
         weapons[index].gameObject.SetActive(true);
         weapons[index].transform.localPosition = Vector3.zero;
@@ -54,17 +60,28 @@ public class FirstPersonShooter : MonoBehaviour
 
     void PointGunAtTarget()
     {
-        if (Physics.Raycast(cam.transform.position + cam.transform.forward, cam.transform.forward, out hit, 500))
+        Ray ray;
+        if (followCursor)
+            ray = cam.ScreenPointToRay(Input.mousePosition);
+        else
+            ray = new Ray(cam.transform.position + cam.transform.forward, cam.transform.forward);
+
+        if (Physics.Raycast(ray, out hit, 500))
         {
             //gunHolder.LookAt(hit.point,Vector3.up);
-            Vector3 gunPointDirection = (hit.point - gunHolder.position).normalized;
+
+            Vector3 gunPointDirection = hit.point;
+            if(ignoreXRotation)
+                gunPointDirection.y = gunHolder.position.y;
+            gunPointDirection =( gunPointDirection - gunHolder.position).normalized;
             gunHolder.rotation = Quaternion.Lerp(gunHolder.rotation, Quaternion.LookRotation(gunPointDirection, Vector3.up), Time.deltaTime * 6);
         }
     }
     // Update is called once per frame
-    void Update()
+    void Update()   
     {
-        PointGunAtTarget();
+        if(cam!=null)
+            PointGunAtTarget();
         if (Input.GetButton("Fire1"))
             shootable?.Shoot();
         

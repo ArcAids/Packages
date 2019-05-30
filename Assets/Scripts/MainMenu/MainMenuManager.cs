@@ -2,17 +2,23 @@
 using System.Collections.Generic;
 using UnityEngine;
 //using levelManagement;
-
-namespace MainMenu
+namespace GameSettingsUI
 {
     public class MainMenuManager : MonoBehaviour
     {
+        [SerializeField]
+        GameSettingsMenu gameSettings;
         [SerializeField]
         LevelLoadEvent loader;
         [SerializeField]
         bool showPromptBeforeExit=true;
         [SerializeField]
         GameObject exitPrompt;
+
+        private void Start()
+        {
+            gameSettings.LoadSettings();
+        }
 
         public void LoadGame()
         {
