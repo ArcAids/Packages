@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.45019186, g: 0.5002313, b: 0.57540584, a: 1}
+  m_IndirectSpecularColor: {r: 0.45019227, g: 0.50023156, b: 0.5754061, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -89,7 +89,7 @@ LightmapSettings:
     m_PVRFilteringAtrousPositionSigmaAO: 1
     m_ShowResolutionOverlay: 1
   m_LightingDataAsset: {fileID: 0}
-  m_UseShadowmask: 1
+  m_UseShadowmask: 0
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -144,10 +144,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d588e90bb2c91c45915929bf863ba0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 7.66
-  rotationSpeed: 6.02
-  dashRechargeTime: 2.92
-  dashBoost: 24.29
+  speed: 6.95
+  rotationSpeed: 10.3
+  dashRechargeTime: 1.5
+  dashBoost: 30.15
 --- !u!114 &25554103
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -646,13 +646,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 650516759}
-  m_LocalRotation: {x: 0.4296059, y: -0, z: -0, w: 0.9030165}
-  m_LocalPosition: {x: 0, y: 13.43, z: -11.3}
+  m_LocalRotation: {x: 0.33044398, y: -0, z: -0, w: 0.9438256}
+  m_LocalPosition: {x: 0, y: 9.58, z: -15}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 50.885002, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 38.591003, y: 0, z: 0}
 --- !u!1001 &1006418073
 PrefabInstance:
   m_ObjectHideFlags: 0

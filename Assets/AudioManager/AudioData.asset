@@ -2,7 +2,7 @@
 %TAG !u! tag:unity3d.com,2011:
 --- !u!114 &11400000
 MonoBehaviour:
-  m_ObjectHideFlags: 0
+  m_ObjectHideFlags: 32
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
@@ -18,9 +18,9 @@ MonoBehaviour:
   exposedMusicVolumeName: MusicVolume
   exposedSFXVolumeName: SFXVolume
   muted: 0
-  musicVolume: 0.6415466
+  musicVolume: 1
   masterVolume: 1
-  sfxVolume: 0
+  sfxVolume: 0.5896418
   volumeCurve:
     serializedVersion: 2
     m_Curve:

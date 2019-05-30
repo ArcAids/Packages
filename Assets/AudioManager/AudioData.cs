@@ -35,6 +35,11 @@ namespace AudioSettings
 
         List<IOnMuteCallback> callbacks = new List<IOnMuteCallback>();
 
+        private void OnEnable()
+        {
+            hideFlags = HideFlags.DontUnloadUnusedAsset;
+        }
+
         public void LoadAudioSettings()
         {
             MasterVolume = masterVolume;

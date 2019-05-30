@@ -11,4 +11,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/WeaponSystem.unity
     guid: c82da7d038020384b8dad907f7e58842
+  - enabled: 1
+    path: Assets/Scenes/isometric3D.unity
+    guid: a15b253cf2630c241860e946f2968b78
   m_configObjects: {}

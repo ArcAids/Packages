@@ -37,7 +37,7 @@ namespace GameSettingsUI
         }
         public void AudioMuted(bool muted)
         {
-            muteToggle.isOn = muted;   
+            muteToggle.isOn = muted;
         }
     }
 
