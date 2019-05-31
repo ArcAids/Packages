@@ -21,10 +21,13 @@ public class GunBehaviour : WeaponBehaviour, IReloadable, IAimable
     [SerializeField]
     bool hasMagazine=true;
     [SerializeField]
-    float recoil=0.3f;
+    [Range(0,1)]
+    protected float accuracy=.5f;
     [SerializeField]
-    protected float accuracy;
+    float recoil=0.3f;
 
+    Light flash;
+    ParticleSystem smoke;
     protected int bulletsInMagazine;
     protected float nextFire;
     protected bool isReloading=false;
@@ -38,6 +41,10 @@ public class GunBehaviour : WeaponBehaviour, IReloadable, IAimable
     {
         FireRate = fireRate;
         bulletsInMagazine = MagazineSize;
+        flash = muzzleTransform.gameObject.GetComponent<Light>();
+        smoke = muzzleTransform.gameObject.GetComponentInChildren<ParticleSystem>();
+        if(flash)
+            flash.enabled = false;
     }
 
     private void OnDisable()
@@ -46,14 +53,13 @@ public class GunBehaviour : WeaponBehaviour, IReloadable, IAimable
         isReloading = false;
     }
 
-    public override WeaponBehaviour Equip()
+    public override void Equip()
     {
         gameObject.SetActive(true);
         nextFire = 0;
-        return this;
     }
 
-    public void Shoot()
+    public void Attack()
     {
         if (isReloading)
             return;
@@ -65,7 +71,9 @@ public class GunBehaviour : WeaponBehaviour, IReloadable, IAimable
                 Reload(MagazineSize);
                 return;
             }
+            StartCoroutine(MuzzleFlash());
             BulletBehaviour bullet=Instantiate(bulletPrefab,muzzleTransform.position, muzzleTransform.rotation ,null).GetComponent<BulletBehaviour>();
+
             bullet.Init(bulletDamage,bulletSpeed);
             nextFire = Time.time + fireDelay;
             bulletsInMagazine--;
@@ -107,14 +115,28 @@ public class GunBehaviour : WeaponBehaviour, IReloadable, IAimable
     {
         Reload(MagazineSize);
     }
+
+    IEnumerator MuzzleFlash()
+    {
+        if (flash!=null)
+        {
+            smoke.Stop();
+            flash.enabled = true;
+            yield return new WaitForSeconds(0.05f);
+            flash.enabled = false;
+            yield return new WaitForSeconds(fireDelay);
+            smoke?.Play();
+        }
+    }
+
 }
 
-interface IShootable
+interface IAttack
 {
-    void Shoot();
+    void Attack();
 }
 
-interface IReloadable : IShootable
+interface IReloadable : IAttack
 {
     void Reload();
 }

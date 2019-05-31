@@ -4,11 +4,11 @@ using UnityEngine;
 
 public abstract class WeaponBehaviour : MonoBehaviour, IEquipableAndDequipable
 {
-    public abstract WeaponBehaviour Equip();
+    public abstract void Equip();
 }
 
 interface IEquipableAndDequipable
 {
-    WeaponBehaviour Equip();
+    void Equip();
 
 }
