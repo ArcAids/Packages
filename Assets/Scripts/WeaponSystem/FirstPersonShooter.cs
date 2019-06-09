@@ -5,9 +5,7 @@ using UnityEngine;
 public class FirstPersonShooter : MonoBehaviour
 {
     [SerializeField]
-    Transform gunHolder;
-    [SerializeField]
-    bool ignoreXRotation = false;
+    protected Transform gunHolder;
     [SerializeField]
     bool followCursor=false;
     [SerializeField]
@@ -18,12 +16,12 @@ public class FirstPersonShooter : MonoBehaviour
     IReloadable reloadable;
     IAimable aimable;
     [SerializeField]
-    Camera cam;
+    protected Camera cam;
     int gunEquippedIndex=-1;
-    RaycastHit hit;
+    protected RaycastHit hit;
 
     // Start is called before the first frame update
-    void Awake()
+    protected void Awake()
     {
         foreach (var gun in weapons)
         {
@@ -37,7 +35,7 @@ public class FirstPersonShooter : MonoBehaviour
             cam = GetComponentInChildren<Camera>();
     }
 
-    void EquipWeapon(int index)
+    protected void EquipWeapon(int index)
     {
         if (index < 0 || index >= weapons.Length || index == gunEquippedIndex)
             return;
@@ -63,7 +61,7 @@ public class FirstPersonShooter : MonoBehaviour
         gunEquippedIndex = index;
     }
 
-    void Dequip(WeaponBehaviour weapon)
+    protected void Dequip(WeaponBehaviour weapon)
     {
         if (weapon is GunBehaviour)
         {
@@ -73,7 +71,7 @@ public class FirstPersonShooter : MonoBehaviour
         gunEquippedIndex = -1;
     }
 
-    void PointGunAtTarget()
+    protected virtual void PointGunAtTarget()
     {
         Ray ray;
         if (followCursor)
@@ -86,14 +84,12 @@ public class FirstPersonShooter : MonoBehaviour
             //gunHolder.LookAt(hit.point,Vector3.up);
 
             Vector3 gunPointDirection = hit.point;
-            if(ignoreXRotation)
-                gunPointDirection.y = gunHolder.position.y;
             gunPointDirection =( gunPointDirection - gunHolder.position).normalized;
             gunHolder.rotation = Quaternion.Lerp(gunHolder.rotation, Quaternion.LookRotation(gunPointDirection, Vector3.up), Time.deltaTime * 6);
         }
     }
     // Update is called once per frame
-    void Update()   
+    protected void Update()   
     {
         if(cam!=null)
             PointGunAtTarget();

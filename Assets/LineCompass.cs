@@ -40,8 +40,6 @@ public class LineCompass : MonoBehaviour
         }
         angle = (angle / 360);
         compassScroller.Scroll(angle);
-        //Vector3 tempPosition = compassLine.localPosition;
-        //tempPosition.x = angle;
-        //compassLine.localPosition = tempPosition;
+ 
     }
 }

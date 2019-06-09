@@ -9,6 +9,10 @@ public class HealthBehaviour : MonoBehaviour, ITakeDamage
     [SerializeField]
     float currentHealth;
 
+    private void Start()
+    {
+        currentHealth = maxHealth;
+    }
     public void OnDamageTaken(float Damage)
     {
         currentHealth-=Damage;
