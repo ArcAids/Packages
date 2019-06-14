@@ -25,6 +25,7 @@ public class FirstPersonShooter : MonoBehaviour
     {
         foreach (var gun in weapons)
         {
+            gun.Init(cam);
             Dequip(gun);
             if (gun is MeleeBehaviour)
                 melee = gun.GetComponent<IAttack>();
@@ -91,10 +92,21 @@ public class FirstPersonShooter : MonoBehaviour
     // Update is called once per frame
     protected void Update()   
     {
-        if(cam!=null)
-            PointGunAtTarget();
+       
         if (Input.GetButton("Fire1"))
             shootable?.Attack();
+
+        if (Input.GetButton("Fire2"))
+        {
+            gunHolder.localRotation = Quaternion.identity;
+            aimable.Aim();
+        }
+        else
+        {
+            if (cam != null)
+                PointGunAtTarget();
+            aimable.StopAiming();
+        }
         if (Input.GetKey(KeyCode.Space))
             melee?.Attack();
 

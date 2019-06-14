@@ -4,6 +4,7 @@ using UnityEngine;
 
 public abstract class WeaponBehaviour : MonoBehaviour, IEquipableAndDequipable
 {
+    public abstract void Init(Camera cam);
     public abstract void Equip();
 }
 

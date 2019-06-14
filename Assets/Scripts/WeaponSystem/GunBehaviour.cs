@@ -5,6 +5,10 @@ using UnityEngine;
 public class GunBehaviour : WeaponBehaviour, IReloadable, IAimable
 {
     [SerializeField]
+    RecoilData recoilData;
+    [SerializeField]
+    CrossHair crossHair;
+    [SerializeField]
     protected GameObject bulletPrefab;
     [SerializeField]
     protected int magazineSize=6;
@@ -23,28 +27,34 @@ public class GunBehaviour : WeaponBehaviour, IReloadable, IAimable
     [SerializeField]
     [Range(0,1)]
     protected float accuracy=.5f;
-    [SerializeField]
-    float recoil=0.3f;
 
+    Recoil recoil;
+    Camera cam;
     Light flash;
     ParticleSystem smoke;
+    Vector3 defaultPosition;
     protected int bulletsInMagazine;
     protected float nextFire;
     protected bool isReloading=false;
+    protected bool isAiming=true;
     float fireDelay;
 
     public float FireRate { get => fireRate; private set{ fireRate = value; fireDelay = 1f / value;} }
     public int MagazineSize { get => magazineSize; }
     public float ReloadTime { get => reloadTime; }
 
-    private void Start()
+    public override void Init(Camera cam)
     {
+        this.cam = cam;
         FireRate = fireRate;
         bulletsInMagazine = MagazineSize;
         flash = muzzleTransform.gameObject.GetComponent<Light>();
         smoke = muzzleTransform.gameObject.GetComponentInChildren<ParticleSystem>();
         if(flash)
             flash.enabled = false;
+
+        recoil = new Recoil(transform,recoilData);
+        StopAiming();
     }
 
     private void OnDisable()
@@ -55,6 +65,7 @@ public class GunBehaviour : WeaponBehaviour, IReloadable, IAimable
 
     public override void Equip()
     {
+        defaultPosition = transform.localPosition;
         gameObject.SetActive(true);
         nextFire = 0;
     }
@@ -72,23 +83,23 @@ public class GunBehaviour : WeaponBehaviour, IReloadable, IAimable
                 return;
             }
             StartCoroutine(MuzzleFlash());
-            BulletBehaviour bullet=Instantiate(bulletPrefab,muzzleTransform.position, muzzleTransform.rotation ,null).GetComponent<BulletBehaviour>();
-
-            bullet.Init(bulletDamage,bulletSpeed);
+            ShootBullet();
+            recoil.StartRecoil();
             nextFire = Time.time + fireDelay;
             bulletsInMagazine--;
         }
     }
 
-    IEnumerator ApplyRecoil()
+    void ShootBullet()
     {
-
-        while (transform.localRotation.eulerAngles.x !=0)
-        {
-
-            yield return null;
-        }
+        BulletBehaviour bullet = Instantiate(bulletPrefab, muzzleTransform.position, muzzleTransform.rotation, null).GetComponent<BulletBehaviour>();
+        bullet.Init(bulletDamage, bulletSpeed);
     }
+
+    //private void Update()
+    //{
+    //    recoil.Recoiling();
+    //}
 
     public void Reload(int numberOfBullets)
     {
@@ -108,7 +119,25 @@ public class GunBehaviour : WeaponBehaviour, IReloadable, IAimable
 
     public void Aim()
     {
-        
+        if (isAiming)
+            return;
+
+        cam.fieldOfView = 30;
+        transform.position = cam.transform.position + cam.transform.forward -cam.transform.up/3;
+        isAiming = true;
+        crossHair.Expand(0);
+    }
+
+    public void StopAiming()
+    {
+        if (!isAiming)
+            return;
+
+        transform.localPosition = defaultPosition;
+        cam.fieldOfView = 60;
+
+        isAiming = false;
+        crossHair.Expand(1);
     }
 
     public void Reload()
@@ -144,4 +173,5 @@ interface IReloadable : IAttack
 interface IAimable
 {
     void Aim();
+    void StopAiming();
 }

@@ -2,42 +2,51 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Recoil : MonoBehaviour
+[System.Serializable]
+public class Recoil
 {
-    private float recoil = 0.0f;
-    private float maxRecoil_x = -20f;
-    private float maxRecoil_y = 20f;
-    private float recoilSpeed = 2f;
-
-    public void StartRecoil(float recoilParam, float maxRecoil_xParam, float recoilSpeedParam)
+    private RecoilData recoilData;
+    Transform gunTransform;
+    float recoil;
+    float recoilY;
+    public Recoil(Transform gunTransform, RecoilData data)
     {
-        // in seconds
-        recoil = recoilParam;
-        maxRecoil_x = maxRecoil_xParam;
-        recoilSpeed = recoilSpeedParam;
-        maxRecoil_y = Random.Range(-maxRecoil_xParam, maxRecoil_xParam);
+        this.gunTransform = gunTransform;
+        recoilData = data;
     }
 
-    void recoiling()
+    public void StartRecoil()
+    {
+        // in seconds
+        recoil = recoilData.recoil;
+
+        recoilY = Random.Range(-recoilData.maxRecoil_y, recoilData.maxRecoil_y);
+    }
+
+    public void Recoiling()
     {
         if (recoil > 0f)
         {
-            Quaternion maxRecoil = Quaternion.Euler(maxRecoil_x, maxRecoil_y, 0f);
+            Quaternion maxRecoil = Quaternion.Euler(recoilData.maxRecoil_x, recoilY, 0f);
             // Dampen towards the target rotation
-            transform.localRotation = Quaternion.Slerp(transform.localRotation, maxRecoil, Time.deltaTime * recoilSpeed);
+            gunTransform.localRotation = Quaternion.Lerp(gunTransform.localRotation, maxRecoil, Time.deltaTime * recoilData.recoilSpeed);
             recoil -= Time.deltaTime;
         }
         else
         {
             recoil = 0f;
             // Dampen towards the target rotation
-            transform.localRotation = Quaternion.Slerp(transform.localRotation, Quaternion.identity, Time.deltaTime * recoilSpeed / 2);
+            gunTransform.localRotation = Quaternion.Slerp(gunTransform.localRotation, Quaternion.identity, Time.deltaTime * recoilData.recoilSpeed );
         }
     }
+}
 
-    // Update is called once per frame
-    void Update()
-    {
-        recoiling();
-    }
+[System.Serializable]
+public class RecoilData
+{
+    public float recoil = 0.0f;
+    public float maxRecoil_x = -20f;
+    public float maxRecoil_y = 20f;
+    public float recoilSpeed = 2f;
+    public CrossHair crosshair;
 }

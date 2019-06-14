@@ -18,7 +18,7 @@ public class MeleeBehaviour : WeaponBehaviour, IAttack
 
     readonly int baseSwingHash = Animator.StringToHash("Swing");
 
-    private void Start()
+    public override void Init(Camera cam)
     {
         trail = GetComponent<TrailRenderer>();
         trail.emitting = false;
