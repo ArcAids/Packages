@@ -8,9 +8,9 @@ public class TopDownShooter : FirstPersonShooter
     bool ignoreHeight;
 
     Plane playerShootingPlane;
-    private new void Awake()
+    private new void Start()
     {
-        base.Awake();
+        base.Start();
         playerShootingPlane = new Plane(Vector3.up,gunHolder.position);
     }
 

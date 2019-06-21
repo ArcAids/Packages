@@ -21,7 +21,7 @@ public class FirstPersonShooter : MonoBehaviour
     protected RaycastHit hit;
 
     // Start is called before the first frame update
-    protected void Awake()
+    protected void Start()
     {
         foreach (var gun in weapons)
         {

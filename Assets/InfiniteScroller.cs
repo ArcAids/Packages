@@ -1,31 +1,31 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class InfiniteScroller
 {
     List<RectTransform> transforms;
-    Vector2 totalLength;
+    public float TotalLength{ get; private set; }
     float hidingPoint;
     float startingPoint;
     float width;
     public InfiniteScroller(List<RectTransform> transforms)
     {
+        if (transforms == null || transforms.Count == 0)
+        { Debug.LogError("no transforms to scroll."); return; }
+
         this.transforms = transforms;
         foreach (var item in this.transforms)
         {
-            totalLength.x+=item.rect.width;
-            totalLength.y+=item.rect.height;
+            TotalLength+=item.rect.width;
         }
-        startingPoint = -(totalLength.x * (1 - (1f / transforms.Count)))/2;
+        startingPoint = -(TotalLength * (1 - (1f / transforms.Count)))/2;
         hidingPoint = -startingPoint;
         width = transforms[0].rect.width;
-        Debug.Log(hidingPoint +":"+ width);
     }
 
     public void Scroll(float point)
     {
-        float startPosition = (point * totalLength.x)-width/2 ;
+        float startPosition = (point * TotalLength)-width/2 ;
         if (startPosition > hidingPoint)
             startPosition = startingPoint -(width-(startPosition-hidingPoint));
         Vector3 objectPosition=transforms[0].localPosition;
@@ -35,9 +35,11 @@ public class InfiniteScroller
             objectPosition.x = startPosition +width/2;
             item.localPosition = objectPosition;
             startPosition += width;
+
             if(startPosition > hidingPoint)
                 startPosition = startingPoint -(width - (startPosition - hidingPoint));
         }
     }
-}
 
+   
+}
