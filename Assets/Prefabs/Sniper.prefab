@@ -87,6 +87,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e54a49d1a7ef284fa9c4e57f05d2a80, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  expandSpeed: 10
 --- !u!1 &480151072
 GameObject:
   m_ObjectHideFlags: 0
@@ -1034,11 +1035,11 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 867867507936050970}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 0
+  m_IsTrigger: 1
+  m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.16946125, y: 0.4155767, z: 2.1841393}
-  m_Center: {x: 0.13635808, y: 0.104955554, z: -0.59574115}
+  m_Size: {x: 0.16946125, y: 0.52914023, z: 2.5187361}
+  m_Center: {x: 0, y: 0.048173785, z: 0.97}
 --- !u!114 &867867507936050975
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1051,18 +1052,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3bd935fd1eea5c4d95f39942790e600, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  type: 0
   recoilData:
     recoil: 0
     maxRecoil_x: -20
     maxRecoil_y: 20
     recoilSpeed: 2
-    crosshair: {fileID: 0}
   crossHair: {fileID: 443436994}
   bulletPrefab: {fileID: 1928000047425886311, guid: 9a3388c29ed785549b0a4b7d9fb3b5cd,
     type: 3}
   magazineSize: 6
-  bulletSpeed: 100
-  bulletDamage: 5
+  bulletSpeed: 1000
+  bulletDamage: 50
   reloadTime: 5
   muzzleTransform: {fileID: 689191917001671551}
   fireRate: 0.5

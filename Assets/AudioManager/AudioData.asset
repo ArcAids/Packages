@@ -18,29 +18,38 @@ MonoBehaviour:
   exposedMusicVolumeName: MusicVolume
   exposedSFXVolumeName: SFXVolume
   muted: 0
-  musicVolume: 1
-  masterVolume: 1
-  sfxVolume: 0.5896418
+  musicVolume: 0.5229868
+  masterVolume: 0.83686775
+  sfxVolume: 0.38580805
   volumeCurve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
       time: -0.005218506
       value: -79.961624
-      inSlope: 183.54007
-      outSlope: 183.54007
+      inSlope: 90.47371
+      outSlope: 90.47371
       tangentMode: 0
       weightedMode: 0
       inWeight: 1
-      outWeight: 0.09670748
+      outWeight: 0.23997107
     - serializedVersion: 3
-      time: 0.2347612
-      value: -40.913567
-      inSlope: 94.085304
-      outSlope: 94.085304
+      time: 0.09982826
+      value: -20.165459
+      inSlope: 44.24786
+      outSlope: 44.24786
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0.21761782
+      inWeight: 0.33333334
+      outWeight: 0.17888306
+    - serializedVersion: 3
+      time: 0.49909937
+      value: -9.985021
+      inSlope: 21.873287
+      outSlope: 21.873287
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.10813124
       outWeight: 0.08251142
     - serializedVersion: 3
       time: 1.0052043

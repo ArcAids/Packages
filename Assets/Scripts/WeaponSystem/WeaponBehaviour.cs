@@ -2,14 +2,27 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class WeaponBehaviour : MonoBehaviour, IEquipableAndDequipable
+namespace WeaponSystem
 {
-    public abstract void Init(Camera cam);
-    public abstract void Equip();
-}
+    public abstract class WeaponBehaviour : MonoBehaviour, IEquipableAndDequipable, IPickable
+    {
+        [SerializeField]
+        public WeaponType type;
 
-interface IEquipableAndDequipable
-{
-    void Equip();
+        public bool Picked { get; protected set; }
 
+        public abstract void Init(Camera cam);
+        public abstract void Equip();
+        public abstract void Dequip();
+
+        public abstract void Pick();
+
+        public abstract void Drop();
+    }
+
+    public interface IEquipableAndDequipable
+    {
+        void Equip();
+        void Dequip();
+    }
 }

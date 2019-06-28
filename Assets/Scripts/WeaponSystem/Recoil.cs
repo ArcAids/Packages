@@ -48,5 +48,4 @@ public class RecoilData
     public float maxRecoil_x = -20f;
     public float maxRecoil_y = 20f;
     public float recoilSpeed = 2f;
-    public CrossHair crosshair;
 }

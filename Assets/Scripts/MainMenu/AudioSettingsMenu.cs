@@ -19,17 +19,17 @@ namespace GameSettingsUI
 
         public void UpdateSettings()
         {
-            audioController.LoadAudioSettings();
             muteToggle.isOn = audioController.Muted;
             masterSlider.value = audioController.MasterVolume;
             musicSlider.value = audioController.MusicVolume;
             sfxSlider.value = audioController.SFXVolume;
-            audioController.RegisterCallBack(this);
         }
 
         private void OnEnable()
         {
-            UpdateSettings();   
+            audioController.LoadAudioSettings();
+            UpdateSettings();
+            audioController.RegisterCallBack(this);
         }
         private void OnDisable()
         {
@@ -38,6 +38,19 @@ namespace GameSettingsUI
         public void AudioMuted(bool muted)
         {
             muteToggle.isOn = muted;
+            if(!muted)
+            {
+                UpdateSettings();
+                masterSlider.fillRect.GetComponent<Image>().color=Color.cyan;
+                musicSlider.fillRect.GetComponent<Image>().color=Color.cyan;
+                sfxSlider.fillRect.GetComponent<Image>().color=Color.cyan;
+            }
+            else
+            {
+                masterSlider.fillRect.GetComponent<Image>().color = Color.blue;
+                musicSlider.fillRect.GetComponent<Image>().color =  Color.blue;
+                sfxSlider.fillRect.GetComponent<Image>().color =    Color.blue;
+            }
         }
     }
 

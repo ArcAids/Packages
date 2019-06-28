@@ -1,11 +1,12 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.Events;
 
 public class HealthBehaviour : MonoBehaviour, ITakeDamage
 {
     [SerializeField]
     float maxHealth;
+    [SerializeField]
+    UnityEvent onDeath;
     [SerializeField]
     float currentHealth;
 
@@ -22,7 +23,10 @@ public class HealthBehaviour : MonoBehaviour, ITakeDamage
 
     void Die()
     {
-        gameObject.SetActive(false);
+        if (onDeath.GetPersistentEventCount()>0)
+            onDeath.Invoke();
+        else
+            gameObject.SetActive(false);
     }
 }
 

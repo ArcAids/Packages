@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using WeaponSystem;
 
 public class PlayerController : MonoBehaviour
 {
@@ -9,16 +10,20 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     GameObject followThis;
     [SerializeField]
+
     Camera cam;
     PlayerMovement playerMovement;
+    FirstPersonShooter fpsController;
 
-    RaycastHit hit;
     IPlayerMovementInput input;
+    Plane movementPlane;
 
     private void Start()
     {
         input = new PlayerInput();
+        movementPlane = new Plane(Vector3.up, transform.position);
         playerMovement = GetComponent<PlayerMovement>();
+        fpsController = GetComponent<FirstPersonShooter>();
     }
 
     private void Update()
@@ -30,12 +35,23 @@ public class PlayerController : MonoBehaviour
             playerMovement.LookToward(followThis.transform.position -transform.position);
         else
         {
-            if(Physics.Raycast(cam.ScreenPointToRay(Input.mousePosition), out hit,80,targetables))
-                playerMovement.LookToward(hit.point- transform.position);
-            else
-                playerMovement.LookToward(transform.forward);
+            Ray ray = cam.ScreenPointToRay(Input.mousePosition);
 
+            if (movementPlane.Raycast(ray, out float point))
+            {
+                Vector3 hit = ray.GetPoint(point);
+                playerMovement.LookToward(hit - transform.position);
+            }
         }
+        fpsController?.UpdateControls();
+    }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        IPickable pickable= other.gameObject.GetComponent<IPickable>();
+        pickable?.Pick();
+        WeaponBehaviour weapon = other.GetComponent<WeaponBehaviour>();
+        if (weapon != null)
+            fpsController.PickUpWeapon(weapon);
     }
 }

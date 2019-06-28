@@ -17,6 +17,7 @@ namespace GameSettingsUI
 
         private void Start()
         {
+
             gameSettings.LoadSettings();
         }
 

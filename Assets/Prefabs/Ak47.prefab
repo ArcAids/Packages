@@ -32,7 +32,7 @@ RectTransform:
   m_Children:
   - {fileID: 6108247743821885561}
   m_Father: {fileID: 4985292425123869702}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -135,7 +135,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 2, y: 2}
+  m_SizeDelta: {x: 5, y: 5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1923102964345623913
 CanvasRenderer:
@@ -186,6 +186,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e54a49d1a7ef284fa9c4e57f05d2a80, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  expandSpeed: 10
 --- !u!1 &4985292424679778753
 GameObject:
   m_ObjectHideFlags: 0
@@ -444,12 +445,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4985292425123869703}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 2.55, z: 0.14}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 1543825317507387660}
   - {fileID: 7184008828113064628}
   - {fileID: 8040968539131082554}
+  - {fileID: 1543825317507387660}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -461,11 +462,11 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4985292425123869703}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 0
+  m_IsTrigger: 1
+  m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 0.13069308, y: 0.26435667, z: 0.9154845}
-  m_Center: {x: -0.00517112, y: -0.057178345, z: 0.07433984}
+  m_Center: {x: 0, y: -0.057178345, z: 0.5}
 --- !u!114 &4985292425123869696
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -478,18 +479,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3bd935fd1eea5c4d95f39942790e600, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  crossHair: {fileID: 0}
+  type: 0
+  recoilData:
+    recoil: 0.2
+    maxRecoil_x: -20
+    maxRecoil_y: 5
+    recoilSpeed: 5
+  crossHair: {fileID: 5115891503994549210}
   bulletPrefab: {fileID: 1928000047425886311, guid: 9a3388c29ed785549b0a4b7d9fb3b5cd,
     type: 3}
   magazineSize: 50
-  bulletSpeed: 50
+  bulletSpeed: 100
   bulletDamage: 1
   reloadTime: 2
   muzzleTransform: {fileID: 7184008828113064628}
   fireRate: 8
   hasMagazine: 1
   accuracy: 0
-  recoil: 0
 --- !u!1 &4985292425445046966
 GameObject:
   m_ObjectHideFlags: 0
@@ -910,7 +916,7 @@ Transform:
   - {fileID: 4985292424679778752}
   - {fileID: 4985292425848591716}
   m_Father: {fileID: 4985292425123869702}
-  m_RootOrder: 0
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &3269751759177952862
 PrefabInstance:
@@ -962,7 +968,7 @@ PrefabInstance:
     - target: {fileID: 5679817661042769130, guid: 78d556ed64f075848b29ed28a0763e9f,
         type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5679817661042769130, guid: 78d556ed64f075848b29ed28a0763e9f,
         type: 3}

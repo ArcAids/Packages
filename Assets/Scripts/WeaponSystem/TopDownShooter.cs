@@ -2,33 +2,41 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TopDownShooter : FirstPersonShooter
+namespace WeaponSystem
 {
-    [SerializeField]
-    bool ignoreHeight;
-
-    Plane playerShootingPlane;
-    private new void Start()
+    public class TopDownShooter : FirstPersonShooter
     {
-        base.Start();
-        playerShootingPlane = new Plane(Vector3.up,gunHolder.position);
-    }
+        [SerializeField]
+        bool ignoreHeight;
 
-    protected override void PointGunAtTarget()
-    {
-        Ray ray;
-
-        ray = cam.ScreenPointToRay(Input.mousePosition);
-
-        if (playerShootingPlane.Raycast(ray,out float point))
+        Plane playerShootingPlane;
+        private new void Start()
         {
-            //gunHolder.LookAt(hit.point,Vector3.up);
+            base.Start();
+            playerShootingPlane = new Plane(Vector3.up, gunHolder.position);
+        }
 
-            Vector3 gunPointDirection = ray.GetPoint(point);
-            if (ignoreHeight)
-                gunPointDirection.y = gunHolder.position.y;
-            gunPointDirection = (gunPointDirection - gunHolder.position).normalized;
-            gunHolder.rotation = Quaternion.Lerp(gunHolder.rotation, Quaternion.LookRotation(gunPointDirection, Vector3.up), Time.deltaTime * 6);
+        protected override void EquipWeapon(int index)
+        {
+            base.EquipWeapon(index);
+            aimable = null;
+        }
+        protected override void PointGunAtTarget()
+        {
+            if (!followCursor)
+                return;
+            Ray ray = cam.ScreenPointToRay(Input.mousePosition);
+
+            if (playerShootingPlane.Raycast(ray, out float point))
+            {
+                //gunHolder.LookAt(hit.point,Vector3.up);
+
+                Vector3 gunPointDirection = ray.GetPoint(point);
+                if (ignoreHeight)
+                    gunPointDirection.y = gunHolder.position.y;
+                gunPointDirection = (gunPointDirection - gunHolder.position).normalized;
+                gunHolder.rotation = Quaternion.Lerp(gunHolder.rotation, Quaternion.LookRotation(gunPointDirection, Vector3.up), Time.deltaTime * 6);
+            }
         }
     }
 }

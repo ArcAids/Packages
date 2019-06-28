@@ -5,11 +5,13 @@ using UnityEngine;
 public class BulletBehaviour : MonoBehaviour
 {
     float damage;
+    Rigidbody rigid;
 
     public void Init(float damage, float force)
     {
         this.damage = damage;
-        GetComponent<Rigidbody>().velocity=transform.forward *force;
+        rigid = GetComponent<Rigidbody>();
+        rigid.velocity=transform.forward *force;
         Destroy(gameObject,2);
     }
 
@@ -19,7 +21,7 @@ public class BulletBehaviour : MonoBehaviour
         if (target!=null)
         {
             target.OnDamageTaken(damage);
-            Destroy(gameObject);
         }
+        Destroy(gameObject);
     }
 }

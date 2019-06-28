@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+[ExecuteInEditMode]
 public class LineCompass : MonoBehaviour
 {
     [SerializeField]
@@ -17,12 +18,14 @@ public class LineCompass : MonoBehaviour
     [SerializeField]
     List<RectTransform> compassLines;
 
+    bool active=true;
+
     float width;
-    float lineWidth;
     float ratio;
     float playerDirection;
     float visibleRange;
     InfiniteScroller compassScroller;
+    float markerAngle;
     List<RectTransform> markers;
     public Vector3 North { get => Vector3.forward; }
 
@@ -30,9 +33,11 @@ public class LineCompass : MonoBehaviour
     {
         compassScroller = new InfiniteScroller(compassLines);
         width = GetComponent<RectTransform>().rect.width;
-        lineWidth = compassLines[0].rect.width;
         ratio=width/compassScroller.TotalLength;
         visibleRange = ratio / 2;
+
+        if (destination == null)
+            marker.gameObject.SetActive(false);
 
         //Debug.Log(FindDifference(0.1f, 0.5f));
         //Debug.Log(FindDifference(0.5f, 0.1f));
@@ -44,11 +49,26 @@ public class LineCompass : MonoBehaviour
         //Debug.Log(FindDifference(0.95f, 0.05f));
     }
 
+    public void SetMarker(Transform destination)
+    {
+        this.destination = destination;
+        marker.gameObject.SetActive(true);
+    }
+
+    public void HideMarker()
+    {
+        this.destination = null;
+        marker.gameObject.SetActive(false);
+    }
+
     private void FixedUpdate()
     {
         float playerAngle=PointTowards(player.forward);
-        float markerAngle = AngleFromNorth((destination.position-player.transform.position).normalized);
-        UpdateMarkerNormalized(markerAngle);
+        if (destination != null)
+        {
+            markerAngle = AngleFromNorth((destination.position - player.transform.position).normalized);
+            UpdateMarkerNormalized(markerAngle);
+        }
     }
 
     void UpdateMarkerNormalized(float angleFromNorthNormalized)
@@ -61,7 +81,6 @@ public class LineCompass : MonoBehaviour
             markerPosition.x = (difference / visibleRange) * (width / 2);
             marker.transform.localPosition=markerPosition;
         }
-        
     }
 
     void UpdateMarker(float angleFromNorth)
@@ -69,12 +88,11 @@ public class LineCompass : MonoBehaviour
         UpdateMarkerNormalized(angleFromNorth/360);
     }
 
-
     float PointTowards(Vector3 direction)
     {
         playerDirection = AngleFromNorth(direction);
-        gauge.SetValue(playerDirection);
-        compassScroller.Scroll(playerDirection);
+        gauge?.SetValue(playerDirection);
+        compassScroller?.Scroll(playerDirection);
         //Debug.Log(playerDirection);
         return playerDirection;
     }

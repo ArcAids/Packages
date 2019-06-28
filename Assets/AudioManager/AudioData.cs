@@ -50,6 +50,11 @@ namespace AudioSettings
 
         void MuteAudio(bool muted)
         {
+            if(!muted && MasterVolume==0)
+            {
+                MasterVolume = 0.2f;
+                return;
+            }
             this.muted = muted;
             mixer.SetFloat(exposedMasterVolumeName, muted ? -80 : GetActualValue(MasterVolume));
             foreach (var reciever in callbacks)
@@ -64,9 +69,9 @@ namespace AudioSettings
 
             mixer.SetFloat(exposedMasterVolumeName, GetActualValue(value));
             if (value == 0)
-                MuteAudio(true);
+                Muted = true;
             if (Muted && value > 0)
-                MuteAudio(false);
+                Muted = false;
         }
 
         void SetMusicVolume(float value)
