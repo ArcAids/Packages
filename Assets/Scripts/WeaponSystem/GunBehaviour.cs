@@ -28,6 +28,8 @@ namespace WeaponSystem
         [SerializeField]
         bool hasMagazine = true;
         [SerializeField]
+        float zoom = 20;
+        [SerializeField]
         [Range(0, 1)]
         protected float accuracy = .5f;
 
@@ -46,6 +48,10 @@ namespace WeaponSystem
         public int MagazineSize { get => magazineSize; }
         public float ReloadTime { get => reloadTime; }
 
+        private void Awake()
+        {
+            crossHair.Hide();
+        }
         public override void Init(Camera cam)
         {
             this.cam = cam;
@@ -55,7 +61,6 @@ namespace WeaponSystem
             smoke = muzzleTransform.gameObject.GetComponentInChildren<ParticleSystem>();
             if (flash)
                 flash.enabled = false;
-
             recoil = new Recoil(transform, recoilData);
             StopAiming();
         }
@@ -137,10 +142,10 @@ namespace WeaponSystem
             if (isAiming)
                 return;
 
-            cam.fieldOfView = 30;
+            cam.fieldOfView = zoom;
             transform.position = cam.transform.position + cam.transform.forward - cam.transform.up / 3;
             isAiming = true;
-            crossHair.Expand(0);
+            crossHair?.Expand(0);
         }
 
         public void StopAiming()
@@ -152,7 +157,7 @@ namespace WeaponSystem
             cam.fieldOfView = 60;
 
             isAiming = false;
-            crossHair.Expand(1);
+            crossHair?.Expand(1);
         }
 
         public void Reload()
@@ -175,12 +180,14 @@ namespace WeaponSystem
 
         public override void Dequip()
         {
-            
+            transform.parent = null;
+            gameObject.SetActive(false);
         }
 
         public override void Pick()
         {
             Picked = true;
+            crossHair.Show();
             GetComponent<Collider>().enabled = false;
         }
 
@@ -188,6 +195,8 @@ namespace WeaponSystem
         {
             Picked = false;
             GetComponent<Collider>().enabled = true;
+            crossHair.Hide();
+            flash.enabled = false;
             gameObject.SetActive(true);
         }
     }

@@ -12,8 +12,11 @@ namespace WeaponSystem
 
     public class FirstPersonShooter : MonoBehaviour
     {
+
         [SerializeField]
         protected Transform gunHolder;
+        [SerializeField]
+        protected Transform aimPosition;
         [SerializeField]
         protected bool followCursor = false;
         [SerializeField]
@@ -248,10 +251,10 @@ namespace WeaponSystem
         {
             if (weapon is GunBehaviour)             //leave it on the ground if not equipped.
             {
-                weapon.gameObject.transform.parent = null;
-                weapon.gameObject.SetActive(false);
+                weapon.Dequip();
             }
-            currentEquippedWeaponIndex = -1;
+            if(isWeaponEquipped(weapon))
+                currentEquippedWeaponIndex = -1;
         }
 
         /// <summary>
@@ -283,21 +286,28 @@ namespace WeaponSystem
         /// </summary>
         public void UpdateControls()
         {
-
             if (Input.GetButton("Fire1"))
                 shootable?.Attack();
 
             if (Input.GetButton("Fire2"))
             {
                 gunHolder.localRotation = Quaternion.identity;
+                if (currentEquippedWeaponIndex >= 0)
+                {
+                    weapons[currentEquippedWeaponIndex].transform.parent = aimPosition;
+                    weapons[currentEquippedWeaponIndex].transform.localRotation = Quaternion.identity;
+                }
                 aimable?.Aim();
             }
             else
             {
                 if (cam != null)
                     PointGunAtTarget();
+                if (currentEquippedWeaponIndex >= 0)
+                    weapons[currentEquippedWeaponIndex].transform.parent = gunHolder;
                 aimable?.StopAiming();
             }
+            weapons[currentEquippedWeaponIndex].transform.localPosition = Vector3.Lerp(weapons[currentEquippedWeaponIndex].transform.localPosition,Vector3.zero,Time.deltaTime *10);
             if (Input.GetKey(KeyCode.Space))
                 melee?.Attack();
             if (Input.GetKey(KeyCode.R))
@@ -329,6 +339,13 @@ namespace WeaponSystem
                 i++;
             }
             return -1;
+        }
+
+        bool isWeaponEquipped(WeaponBehaviour weapon)
+        {
+            if (currentEquippedWeaponIndex < 0)
+                return false;
+            return weapons[currentEquippedWeaponIndex] == weapon;
         }
 
         private void Update()
